@@ -3,6 +3,7 @@ package gopherdb
 import (
 	"errors"
 	"os"
+	"strconv"
 	"path/filepath"
 	"log"
 )
@@ -32,3 +33,11 @@ func Load(filePath string) (gopher, error) {
 	//
 	return gopher{filePath, files}, nil
 }
+
+func (g *gopher) shard(numShards int) error {
+	for i:=0;i<numShards;i++ {
+		os.Create("./"+g.name+"/shard"+strconv.Itoa(i+1)+".log")
+	}
+	return nil
+}
+

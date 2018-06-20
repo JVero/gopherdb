@@ -1,19 +1,19 @@
 package gopherdb
 
+
 import (
-	"log"
+	"testing"
 	"fmt"
 	"os"
-	"testing"
+	"log"
 )
-
-func TestInit(t *testing.T) {
-	db_name := "first"
+func TestShard(t *testing.T) {
+	db_name := "shard"
 	defer os.RemoveAll(db_name) // cleanup
 	g, err := New(db_name)
 	if err != nil {
 		log.Fatal(err)
 	}
 	fmt.Println(g.name)
-	g.shard(1)
+	g.shard(5)
 }
