@@ -3,7 +3,6 @@ package gopherdb
 
 import (
 	"testing"
-	"fmt"
 	"os"
 	"log"
 )
@@ -14,6 +13,5 @@ func TestShard(t *testing.T) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Println(g.name)
 	g.shard(5)
 }
