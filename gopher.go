@@ -1,11 +1,10 @@
 package gopherdb
 
 import (
-	"encoding/json"
 	"errors"
-	"path/filepath"
-	"fmt"
 	"os"
+	"path/filepath"
+	"log"
 )
 
 type gopher struct {
@@ -13,22 +12,23 @@ type gopher struct {
 	keys []string
 }
 
-func New(filepath string) gopher {
-	os.Mkdir(filepath)
-	return gopher{name: filepath}
+func New(filePath string) (gopher, error) {
+	if _, err := os.Stat("./" + filePath); err == nil {
+		return gopher{}, errors.New("Directory already exists with the same name")
+	}
+	os.Mkdir(filePath, os.ModePerm)
+	return gopher{name: filePath}, nil
 }
 
-func Load(filepath string) (gopher, err) {
-	if _, err := os.Stat("./filepath"); os.IsNotExist(err) { // directory does not exist
-		return nil, errors.New("Database does not exist, consider using the New command to construct a new database")
+func Load(filePath string) (gopher, error) {
+	if _, err := os.Stat("." + filePath); os.IsNotExist(err) { // directory does not exist
+		return gopher{}, errors.New("Database does not exist, consider using the New command to construct a new database")
 	}
-	_ = os.Chdir(filepath)
+	_ = os.Chdir(filePath)
 	files, err := filepath.Glob("*.hole")
 	if err != nil {
 		log.Fatal(err)
 	}
-	// 
-	return gopher{}
+	//
+	return gopher{filePath, files}, nil
 }
-
-
